@@ -726,6 +726,11 @@
                         <tbody id="att-players-list" class="divide-y"></tbody>
                     </table>
                 </div>
+                <div class="mt-4 flex justify-end">
+                    <div class="bg-green-100 px-4 py-2 rounded-xl text-green-700 font-bold text-xs uppercase shadow-sm flex items-center border border-green-200">
+                        TOTAL HADIR: <span id="att-total-hadir" class="text-green-800 font-black text-xl ml-2">0</span>
+                    </div>
+                </div>
                 <div class="mt-4">
                     <label class="block text-[10px] font-extrabold text-gray-400 mb-1 uppercase">Catatan / Evaluasi Sesi</label>
                     <textarea id="att-notes" rows="2" placeholder="Tambahkan catatan, hasil evaluasi, atau keterangan sesi ini..." class="w-full p-3 border rounded-xl outline-none border-gray-200 font-bold resize-y text-sm"></textarea>
@@ -1678,11 +1683,19 @@
                     <td class="p-3 text-center"><input type="radio" name="att_p_${p.id}" value="Alpa" ${s === 'Alpa' ? 'checked' : ''} onchange="updateAttStatus(${p.id}, 'Alpa')" class="w-4 h-4 text-red-600 accent-red-600"></td>
                 </tr>`;
             }).join('');
+            updateTotalHadir();
+        }
+
+        function updateTotalHadir() {
+            const total = currentAttSession.filter(r => r.status === 'Hadir').length;
+            const el = document.getElementById('att-total-hadir');
+            if (el) el.innerText = total;
         }
 
         function updateAttStatus(pid, status) {
             const rec = currentAttSession.find(r => r.pid === pid);
             if (rec) rec.status = status;
+            updateTotalHadir();
         }
 
         function closeAttendanceModal() { document.getElementById('attendance-modal').classList.add('hidden'); }
